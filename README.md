@@ -70,24 +70,24 @@ This API deletes the specified todo identified by the id path parameter.
 
 ## Getting Started  
 
-**Clone the repo from GitHub**  
+### **Clone the repo from GitHub**  
 ```bash
 git clone https://github.com/Rajkumarsahu-xyz/Express-HTTP-CRUD-API.git
 ```
 
-**cd to the Express-HTTP-CRUD-API directory**
+### **cd to the Express-HTTP-CRUD-API directory**
 ```bash
 cd Express-HTTP-CRUD-API
 ```
 
-**Install npm packages and modules**
+### **Install npm packages and modules**
 ```bash
 npm install
 ```
 You can also install individual packages using ```npm i <package-name>```.
 To install and configure ESLint, Husky and Prettier, follow this [link](https://dev.to/ruppysuppy/automatically-format-your-code-on-git-commit-using-husky-eslint-prettier-in-9-minutes-45eg).  
 
-**Install and Setup PostgreSQL**  
+### **Install and Setup PostgreSQL**  
 Follow this link to install and set up Postgresql in your system - [Link](https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart).  
 
 Create a postgres user using ```CREATE USER <user-name> WITH SUPERUSER PASSWORD '<password>'``` and create a database using ```createdb <database-name>```.  
@@ -105,7 +105,7 @@ CREATE TABLE todos (
 );
 ```
 
-**Usage**
+### **Usage**  
 To run the server :
 ```bash
 node server.js
