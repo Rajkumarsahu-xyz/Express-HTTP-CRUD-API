@@ -1,18 +1,23 @@
+/* eslint-disable */
 const { DataTypes } = require('sequelize');
 const sequelize = require('./db.js');
 
-const Todo = sequelize.define('todos', {
-  text: {
-    type: DataTypes.STRING,
-    allowNull: false,
+const Todo = sequelize.define(
+  'todos',
+  {
+    text: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    iscompleted: {
+      type: DataTypes.BOOLEAN,
+    },
   },
-  iscompleted: {
-    type: DataTypes.BOOLEAN
-  }}, 
   {
     tableName: 'todos',
-    timestamps: false
-});
+    timestamps: false,
+  },
+);
 // console.log(Todo === sequelize.models.Todo);
 
 module.exports = Todo;

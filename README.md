@@ -106,8 +106,9 @@ CREATE TABLE todos (
 ```
 
 ### **Usage**  
-To run the server :
+Refer to the ```.env.example``` file and make a ```.env``` file according to that.
+Now to run the server :
 ```bash
 node server.js
 ```
-Now go to your Postman for running the APIs ```/GET```, ```/POST```, ```/PUT```, ```/DELETE``` on ``````.
+Now go to your Postman for running the APIs ```/GET```, ```/POST```, ```/PUT```, ```/DELETE```.

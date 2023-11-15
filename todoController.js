@@ -1,5 +1,6 @@
-const Todo = require("./todo.js");
-const yup = require("yup");
+/* eslint-disable */
+const Todo = require('./todo.js');
+const yup = require('yup');
 
 // Validation schema using Yup
 const todoSchema = yup.object().shape({
@@ -7,45 +8,64 @@ const todoSchema = yup.object().shape({
   isCompleted: yup.boolean(),
 });
 
-const todoController = {
-  getAllTodos: async (req, res) => {
-    const todos = await Todo.findAll();
-    res.json({ todos });
-  },
+const errorHandler = (err, req, res, next) => {
+  if (err instanceof yup.ValidationError) {
+    res.status(400).json({ message: 'Validation Error', errors: err.errors });
+  } else {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
-  getTodoById: async (req, res) => {
-    const { id } = req.params;
-    const todo = await Todo.findByPk(id);
-    if (todo) {
-      res.json(todo);
-    } else {
-      res.status(404).json({ message: "not found" });
+const todoController = {
+  getAllTodos: async (req, res, next) => {
+    try {
+      const todos = await Todo.findAll();
+      res.json({ todos });
+    } catch (error) {
+      next(error);
     }
   },
 
-  createTodo: async (req, res) => {
+  getTodoById: async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const todo = await Todo.findByPk(id);
+      if (todo) {
+        res.json(todo);
+      } else {
+        res.status(404).json({ message: 'Not Found' });
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  createTodo: async (req, res, next) => {
     try {
       await todoSchema.validate(req.body);
-      const { text, iscompleted } = req.body;
-      const newTodo = await Todo.create({ text, iscompleted });
+      const { text, isCompleted } = req.body;
+      const newTodo = await Todo.create({ text, isCompleted });
       res.status(201).json(newTodo);
     } catch (error) {
-      res.status(400).json({ message: "Bad Request", error: error.message });
+      next(error);
     }
   },
 
-  updateTodo: async (req, res) => {
+  updateTodo: async (req, res, next) => {
     const { id } = req.params;
     try {
-      await todoSchema.validate(req.body);
-      const { text, iscompleted } = req.body;
-      const updatedTodo = await Todo.update(
-        { text, iscompleted },
-        { where: { id }, returning: true }
-      );
-      res.json(updatedTodo[1][0]);
+      const todo = await Todo.findById(id);
+      if (todo) {
+        await todoSchema.validate(req.body);
+        const { text, isCompleted } = req.body;
+        const updatedTodo = await todo.update({ text, isCompleted });
+        res.json(updatedTodo);
+      } else {
+        res.status(404).json({ message: 'Not Found' });
+      }
     } catch (error) {
-      res.status(400).json({ message: "Bad Request" });
+      next(error);
     }
   },
 
@@ -56,9 +76,9 @@ const todoController = {
       await todo.destroy();
       res.status(204).send();
     } else {
-      res.status(404).json({ message: "not found" });
+      res.status(404).json({ message: 'Not Found' });
     }
   },
 };
 
-module.exports = todoController;
+module.exports = { todoController, errorHandler };
